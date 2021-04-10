@@ -1,17 +1,12 @@
+# importing needed libaries
 import os
 import csv
-#import numpy as np
 
+
+# Getting to the file path with my needed csv. One directory backwards and then into resources
 budget_data = os.path.join('..','Resources', 'budget_data.csv')
 
-# for loop to count months through every year
-# x =  0, and then add ot it every line
-# subtract next month from curerent month, and add it to a variable, and then divide by length of list
-# find greatest in list
-# find greatest decres
-
-
-
+# Declaring all my needed arrays and variables
 net_totals = []
 profit_changes_str = []
 profit_changes = []
@@ -23,80 +18,65 @@ month_change = []
 total_profit_changes = 0
 avg_profit_changes = 0
 
-maximum = ""
-minimum = ""
-
-
+# reading the csv file through the path i specified earlier
 with open (budget_data) as budget_data:
 	csv_reader = csv.reader(budget_data, delimiter = ",")
 
 	header = next(csv_reader)
 	for i in csv_reader:
 
-#		net_totals.append(i[1])
-#		for i in net_totals:
-#			net_totals[i] = int(net_totals[i])
-#			i = i+1
-
+		# Adding to my profit changes list
 		profit_changes_str.append(i[1])
+		# adding to my net totals list
 		net_totals.append(i[1])
+		# making sure to change the data type of my list from string to int
 		net_totals = [int(item) for item in net_totals]
+		# counting all the months
 		total_months = total_months + 1
 
 	for i in range(len(net_totals)):
 
 		try:
+			# setting current month to the first item in net totals
 			current_month = int(net_totals[i])
+			# Setting next month to the item one after the current month
 			next_month = int(net_totals[i+1])
+			# getting the difference
 			month_change = next_month - current_month
+			# adding the difference to a list
 			profit_changes.append(month_change)
-
-#			for i in net_totals:
-#				if i > maximum:
-#					maximum = i
-#
-#				if i < minimum:
-#					minimum = i
-
+		# code always broke at the end from an index error
 		except IndexError:
 			break
 
-	#print(profit_changes)
-#	print(net_totals)
-#	for i in net_totals:
-#		print(type(i))
 
-	#print (len(profit_changes))
-	
-
-
-
-
-	#print(maximum)
-	#print(minimum)
-
+	# printing all requested information to the terminal
 	print ("Total Months: " + str(total_months - 1))
 	print ("Total: " + str(sum(net_totals)))
+
+	# now that these variables have values I can use them to solve for others
 	total_profit_changes = sum(profit_changes)
 	avg_profit_changes = total_profit_changes/len(profit_changes)
+	
+	# printing the rest of the requested info to the terminal
 	print("Average Change: " + str(avg_profit_changes))
 	print ("Greatest Increase in Profits: " + str(max(profit_changes)))
 	print ("Greatest Decrease in Profits: " + str(min(profit_changes)))
-	#print (type(net_totals))
-
-	#print(profit_changes)
 
 
-#avg_change = profit_changes/length
+	# Creating text file
+	file = open("PyBank_Financial_Analysis.txt", "w")
+	# writing to the text file
+	file.write("Total Months: " + str(total_months - 1))
+	# new Line
+	file.write("\n")
+	file.write("Total: " + str(sum(net_totals)))
+	file.write("\n")
+	file.write("Average Change: " + str(avg_profit_changes))
+	file.write("\n")
+	file.write("Greatest Increase in Profits: " + str(max(profit_changes)))
+	file.write("\n")
+	file.write("Greatest Decrease in Profits: " + str(min(profit_changes)))
 
-#	length = len(budget_data - 2)
-
-#	cs.reader[1]
-
-#    minVal, maxVal = [], []
-#    for i in data:
-#        minVal.append(i[1])
-#        maxVal.append(i[2])
-
-#print min(minVal)
-#print max(maxVal)
+	# closing the text file
+	file.close()
